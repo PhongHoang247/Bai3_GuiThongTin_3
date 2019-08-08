@@ -77,13 +77,8 @@
     <RadioGroup
         android:id="@+id/radGroup"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radTrungCap"
@@ -105,8 +100,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Đại học" />
-        </LinearLayout>
-
     </RadioGroup>
 
     <TextView

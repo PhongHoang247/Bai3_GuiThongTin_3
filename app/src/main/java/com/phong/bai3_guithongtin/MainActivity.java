@@ -3,6 +3,7 @@ package com.phong.bai3_guithongtin;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         addEvents();
     }
 
+
     private void addEvents() {
         btnGuiThongTin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,18 +41,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void XuLyGuiThongTin() {
-        /* dưới đây là hàm khởi tạo một AlertDialog.Builder, thằng này có tác dụng vẽ ra giao diện cho AlertDialog,
-        mặc định nó sẽ sử dụng theme dialog mặc định khi show */
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông tin cá nhân");// set tiêu đề cho AlertDialog
-        builder.setMessage(edtHoTen.getText().toString() + "\n");//set nội dung bên trong cho Alert
-        builder.setMessage(edtCMND.getText().toString() + "\n");//set nội dung bên trong cho Alert
-        int id = radGroup.getCheckedRadioButtonId();//Tìm RadioButton trong RadioGroup đang đc Checked
-        if (id > 0)
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.itemfordialog);
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView txtTen =(TextView)  dialog.findViewById(R.id.txtTen);
+        txtTen.setText(edtHoTen.getText().toString());
+
+        TextView txtCMT = (TextView) dialog.findViewById(R.id.txtCMT);
+        txtCMT.setText(edtCMND.getText().toString());
+
+        TextView txtBangCap = (TextView) dialog.findViewById(R.id.txtBangCap);
+        /*if(radDaiHoc.isChecked())
         {
-            RadioButton radioButton = (RadioButton) findViewById(id);
-            builder.setMessage(radioButton.getText() + "\n");//set nội dung bên trong cho Alert
+            txtBangCap.setText(radDaiHoc.getText());
         }
+        else if (radCaoDang.isChecked())
+        {
+            txtBangCap.setText(radCaoDang.getText());
+        }
+        else if (radTrungCap.isChecked())
+        {
+            txtBangCap.setText(radTrungCap.getText());
+        }*/
+        //Tìm RadioButton trong trong group mà đang đc Checked:
+        int id = radGroup.getCheckedRadioButtonId();
+        if (id>0)
+        {
+            RadioButton radioButton=(RadioButton) findViewById(id);
+            txtBangCap.setText(radioButton.getText());
+        }
+        TextView txtSoThich = (TextView) dialog.findViewById(R.id.txtSoThich);
         String sothich = "";
         if (chkDocBao.isChecked())
         {
@@ -63,28 +85,19 @@ public class MainActivity extends AppCompatActivity {
         {
             sothich += chkDocCoding.getText().toString() + " - ";
         }
-        builder.setMessage(sothich + "\n");//set nội dung bên trong cho Alert
-        builder.setMessage("------------------\n");//set nội dung bên trong cho Alert
-        builder.setMessage("Thông tin bổ sung\n");//set nội dung bên trong cho Alert
-        builder.setMessage(edtThongTinBoSung.getText().toString() + "\n");//set nội dung bên trong cho Alert
-        builder.setMessage("------------------\n");//set nội dung bên trong cho Alert
-        /*
-        đây là thuộc tính nếu set false thì khi show dialog lên người dùng click ra bên ngoài dialog thì nó vẫn không bị mất,
-        nếu set true thì sẽ mất khi click vào bất kì đâu ngoài dialog.
-         */
-        builder.setCancelable(false);
-        /*
-        thêm một nút Button ở giữa, NeutralB nghĩa là Trung lập, mà trung lập là nằm giữa.
-        Ở đây đặt tên cho nó là gì thì tuỳ và phía dưới sẽ bắt sự kiện cho nó
-         */
-        builder.setNeutralButton("Đóng", new DialogInterface.OnClickListener() {
+        txtSoThich.setText(sothich);
+
+        TextView txtThongTinBS = (TextView) dialog.findViewById(R.id.txtThongTinBS);
+        txtThongTinBS.setText(edtThongTinBoSung.getText().toString());
+
+        Button btnDong = (Button) dialog.findViewById(R.id.btnDong);
+        btnDong.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        dialog.show();
     }
 
     private void addControls() {
